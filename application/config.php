@@ -15,7 +15,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -189,13 +189,34 @@ return [
 
     'cache'                  => [
         // 驱动方式
-        'type'   => 'File',
+        //'type'   => 'File',
         // 缓存保存目录
-        'path'   => CACHE_PATH,
+        //'path'   => CACHE_PATH,
         // 缓存前缀
-        'prefix' => '',
+        //'prefix' => '',
         // 缓存有效期 0表示永久缓存
-        'expire' => 0,
+        //'expire' => 0,
+      // 选择模式
+      'type'   => 'complex',
+      // 默认(文件缓存)
+      'default'=>[
+          // 文件缓存
+          'type'   => 'File',
+          // 缓存保存目录
+          'path'   => CACHE_PATH,
+          // 缓存前缀
+          'prefix' => '',
+          // 缓存有效期 0表示永久缓存
+          'expire' => 0,
+      ],
+      // Redis缓存
+      'redis'=>[
+          'type'   =>'Redis',
+          'host'   => '127.0.0.1',
+          'port'   => '6379',
+          'password' => '',
+          'timeout'=> 3600
+      ]
     ],
 
     // +----------------------------------------------------------------------
