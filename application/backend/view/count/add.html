@@ -1,0 +1,132 @@
+{extend name="base" /}
+	{block name="resources"}
+	<link rel="stylesheet" href="/assets/layui/dist/css/layui.css"  media="all">
+  <style>
+  .layui-form-label.layui-required:after{
+        content:"*";
+        color:red;
+        position: absolute;
+        top:5px;
+        right:10px;
+    }
+  </style>
+	{/block}
+	{block name="menu"}
+		{include file="header" /}
+	{/block}
+	{block name="left"}
+		{include file="sidebar" /}
+	{/block}
+	{block name="main"}
+        <div class="content-inner">
+          <header class="page-header">
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom">Dashboard</h2>
+            </div>
+          </header>
+          <section class="dashboard-counts no-padding-bottom">
+            <div class="container-fluid">
+              <div class="row bg-white has-shadow">
+				<form class="layui-form" action="">
+				  <div class="layui-form-item">
+				      	 <label class="layui-form-label layui-required">起止日期</label>
+				     	 <div class="layui-input-block">
+				        	<input type="text" name="time" id="time" lay-verify="required"  autocomplete="off" class="layui-input">
+				    	</div>
+				  </div>
+				   <div class="layui-form-item">
+				      <label class="layui-form-label layui-required">截止日期</label>
+				      <div class="layui-input-block">
+				        <input type="text" name="dtime" id="dtime" lay-verify="required" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <label class="layui-form-label">方式</label>
+				    <div class="layui-input-block">
+				      <input type="checkbox" name="type[1]" title="餐桌" lay-verify="otherrequired" value=1 checked="">
+				      <input type="checkbox" name="type[2]" title="自助" lay-verify="otherrequired" value=2>
+				    </div>
+				  </div>
+				  
+				  <div class="layui-form-item">
+				    <label class="layui-form-label">状态</label>
+				    <div class="layui-input-block">
+				      <input type="radio" name="status" value="1" title="开启" lay-verify="otherrequired" checked="">
+				    </div>
+				  </div>
+				   <div class="layui-form-item">
+				    <div class="layui-inline">
+				      <label class="layui-form-label">价格</label>
+				      <div class="layui-input-inline" style="width: 100px;">
+				        <input type="text" name="price" placeholder="￥10" autocomplete="off" class="layui-input">
+				      </div>
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <div class="layui-input-block">
+				      <button type="button" class="layui-btn" lay-submit="" lay-filter="add">立即提交</button>
+				      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				    </div>
+				  </div>
+				</form>
+ 
+              </div>
+            </div>
+          </section>
+        </div>
+		{/block}
+{block name="script"}
+<script src="/assets/layui/dist/layui.js" charset="utf-8"></script>
+<script>
+		layui.use(['form', 'laydate'], function(){
+				var form = layui.form
+						,layer = layui.layer
+						,laydate = layui.laydate
+  						, jq = layui.jquery;
+
+				laydate.render({
+						elem: '#dtime',
+						calendar: true,
+						trigger: 'click',
+						type: 'datetime',
+						value: new Date(),
+						format: 'yyyy-M-d H:m:s',
+						min: -0
+				});
+				laydate.render({
+						elem: '#time',
+						range: true,
+						min: -0
+				});
+
+				form.on('submit(add)', function(data){
+            		loading = layer.load(2, {
+                		shade: [0.2, '#000']
+            		});
+						var param = data.field;
+						var range = param.time.split(' - ');
+						param.stime = range[0];
+						param.etime = range[1];
+						var stime = new Date(range[0]);
+						var etime = new Date(range[1]);
+						if (stime.getTime() > etime.getTime()) {
+								layer.alert('开始日期不能大于截止日期');
+								return;
+						}
+						jq.post('{:url("backend/count/add")}', param, function (data) {
+								if (data.code == 200) {
+										layer.close(loading);
+										layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+												location.href = '{:url("backend/count/index")}';
+										});
+								} else {
+										layer.close(loading);
+										layer.msg(data.msg, {icon: 2, anim: 6, time: 1000});
+								}
+						});
+						return false;
+				});
+
+		});
+</script>
+{/block}

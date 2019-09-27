@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Home</title>
+	<title>{block name="title"}Home{/block}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="/assets/css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="/assets/css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+	{block name="resources"}{/block}
+  </head>
+  <body>
+	<div class="page">
+    {block name="menu"}{/block}
+		<div class="page-content d-flex align-items-stretch">
+    	{block name="left"}{/block}
+    	{block name="main"}
+    		{block name="footer"}{/block}
+		{/block}
+    	</div>
+    </div>
+    <script src="/assets/js/jquery/jquery.min.js"></script>
+    <script src="/assets/js/popper.js/umd/popper.min.js"> </script>
+    <script src="/assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="/assets/js/jquery-validation/jquery.validate.min.js"></script>
+	<script src="/assets/js/front.js"></script>
+	{block name="script"}{/block}
+  </body>
+</html>

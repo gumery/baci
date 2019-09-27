@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, Bootstrap Table!</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+  </head>
+  <body style="background-color: honeydew;">
+	<div style="margin:100px;">
+		<div class="alert alert-warning" style="display:none;">
+			<a href="#" class="close" data-dismiss="alert">
+				&times;
+			</a>
+			<strong>警告！</strong>
+			<span class="alert-message"></span>
+		</div>
+
+		<div class="page-header">
+			<h3>添加：</h3>
+		</div>
+	    <form id="updateform">
+	      <div class="form-group col-md-4">
+	        <label for="start_time">请选择开始时间</label>
+	        <input type="date" class="form-control" name="start_time" required="required">
+			<div class="invalid-feedback"><small>请选择日期！</small></div>
+	      </div>
+	      <div class="form-group col-md-4">
+	        <label for="end_time">请选择结束时间</label>
+	        <input type="date" class="form-control" name="end_time" required="required">
+			<div class="invalid-feedback"><small>请选择日期！</small></div>
+	      </div>
+	      <label for="type">方式：</label>
+	      <div class="form-group checkbox col-md-4">
+	        <input type="checkbox" name="type[]" value=1 checked> 1
+	        <input type="checkbox" name="type[]" value=2> 2
+	      </div>
+	      <label for="is_open">状态：</label>
+	      <div class="form-group radio col-md-4">
+			<input type="radio" name="open"  value=1 checked> 开启
+	      </div>
+	      <button type="button" class="btn btn-select btn-primary">提交</button>
+	    </form>
+	<div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+  </body>
+</html>
+<script type="text/javascript">
+//	form.submit();
+//	$("#myModal").on("hidden.bs.modal", function() {
+//		$(this).removeData("bs.modal");
+//	});
+    $('body').on('click', '.btn-select', function() {
+		var $form = $('#updateform');
+        $.post('/index/manage/add', $form.serialize(), function(result) {
+            if (result.code == 200) {
+                window.location.href='/index/manage';
+                return;
+			} else {
+				var msg = result.msg;
+				$('.alert-warning .alert-message').text(msg);
+				$('.alert-warning').show();
+				return;
+			}
+        });
+    });
+</script>

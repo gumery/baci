@@ -1,18 +1,14 @@
 <?php
-namespace app\index\controller;
+namespace app\backend\controller;
 
 use app\model\Round as Round;
 use app\model\Plan as Plan;
 use think\Validate as Validate;
 
-class Manage extends Base
+class Count extends Base
 {
 	public function index($id='')
 	{
-		$id = input('id', '');
-		$secretKey = uniqid(sha1('gaoxiaoxiang'));
-	//	if ($id != $secretKey) return '你走错了';
-
 		$round = new Round();
 		$rounds = $round->order('id desc')->select();
 
@@ -56,22 +52,26 @@ class Manage extends Base
 		if (!request()->isPost()) return view();
 
 		$round = new Round();
-		$count = $round->where('open', 1)->count();
+		$count = $round->where('status', 1)->count();
 		if ($count) return json(['code'=>0, 'msg'=>'请结束正在启用中的计划']);
 
 		$form = input('post.');
-		$stime = $form['start_time'] ?: '';
-		$etime = $form['end_time'] ?: '';
-		$types = $form['type'] ?: [];
-		$open  = $form['open'] ?: 0;
+		$stime = isset($form['stime']) ? $form['stime'] : '';
+		$etime = isset($form['etime']) ? $form['etime']: '';
+		$dtime = isset($form['dtime']) ? $form['dtime']: '';
+		$types = isset($form['type']) ? $form['type'] : [];
+		$status  = isset($form['status']) ? $form['status'] : 0;
+		$price  = isset($form['price']) ? $form['price'] : 10;
 
 		if ($stime > $etime) return json(['code'=>0, 'msg'=>'开始时间不能大于截止时间']);
 
 		$data = [
 			'stime' => $stime,
 			'etime' => $etime,
+			'dtime' => $dtime,
 			'types' => $this->getTypesValue($types),
-			'open'  => $open
+			'status'  => $status,
+			'unit_price' => $price
 		];
 
 		$validate = $this->getValidate();

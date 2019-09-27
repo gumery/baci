@@ -17,7 +17,16 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "5.0.*"
+        "topthink/framework": "5.0.*",
+        "topthink/think-image":"v1.0.7",
+        "topthink/think-queue":"v1.1.4",
+        "topthink/think-mongo":"v1.7",
+        "topthink/think-helper":"v1.0.6",
+        "topthink/think-migration":"v1.0.6",
+        "topthink/think-captcha":"v1.0.7",
+        "jaeger/querylist": "V3.2.1",
+        "jaeger/querylist-ext-request": "^1.0",
+		"rych/phpass": "2.1.0-dev"
     },
     "autoload": {
         "psr-4": {
