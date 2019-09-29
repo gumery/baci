@@ -21,6 +21,7 @@ class Index extends Base
 		$this->assign('weeks', $this->getWeek());
 		return view();
 	}
+
 	public function add()
 	{
 		if (!request()->isPost()) return $this->fetch('index/index');
@@ -29,10 +30,11 @@ class Index extends Base
 		$roundId = isset($form['round_id']) ? $form['round_id'] : 0;
 		$weeks = isset($form['weeks']) ? $form['weeks'] : [];
 		$types = isset($form['types']) ? $form['types'] : [];
+		$captcha = isset($form['captcha']) ? $form['captcha'] : '';
 		if (!$roundId) return json(['code'=>0, 'msg'=> '请求参数异常']);
+		if(!captcha_check($captcha)) return json(['code'=>0, 'msg'=>'验证码错误']);
 		if (empty($username)) return json(['code'=>0, 'msg'=>'请填写姓名']);
 		if (empty($weeks)) return json(['code'=>0, 'msg'=>'请选择就餐日期']); 
-
 	
 		$model = new Round();
 		$round = $model->get($roundId);

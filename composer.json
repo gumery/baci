@@ -26,7 +26,7 @@
         "topthink/think-captcha":"v1.0.7",
         "jaeger/querylist": "V3.2.1",
         "jaeger/querylist-ext-request": "^1.0",
-		"rych/phpass": "2.1.0-dev"
+		"rych/phpass": "v2.0.1"
     },
     "autoload": {
         "psr-4": {

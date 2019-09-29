@@ -1,36 +1,30 @@
 <?php
 namespace app\backend\controller;
 
-use app\model\Round as Round;
-use app\model\Plan as Plan;
+use app\model\Round as roundModel;
+use app\model\Plan as planModel;
 use think\Validate as Validate;
 
 class Count extends Base
 {
+	//判断用户是否登录状态
+	public function __construct()
+	{
+		parent::__construct();
+		$this->checkLogin();
+	}
+
+	//统计列表页
 	public function index($id='')
 	{
-		$round = new Round();
+		$round = new roundModel;
 		$rounds = $round->order('id desc')->select();
 
 		$this->assign('rounds', $rounds);
 		return view();
 	}
 
-	public function getTypesValue($types)
-	{
-		$typeValue = [
-			'1' => '餐桌',
-			'2' => '自助'
-		];
-		
-		$str = [];
-		foreach ($types as $type) {
-			$str[] = $typeValue[$type];
-		}
-
-		return implode(' / ', $str);
-	}
-
+	//验证器
 	public function getValidate()
 	{
 		$rule = [
@@ -47,11 +41,12 @@ class Count extends Base
 		return $validate;
 	}
 
+	//添加新的轮次
 	public function add()
 	{
 		if (!request()->isPost()) return view();
 
-		$round = new Round();
+		$round = new roundModel;
 		$count = $round->where('status', 1)->count();
 		if ($count) return json(['code'=>0, 'msg'=>'请结束正在启用中的计划']);
 
@@ -69,7 +64,7 @@ class Count extends Base
 			'stime' => $stime,
 			'etime' => $etime,
 			'dtime' => $dtime,
-			'types' => $this->getTypesValue($types),
+			'types' => $types,
 			'status'  => $status,
 			'unit_price' => $price
 		];
@@ -87,6 +82,7 @@ class Count extends Base
 		return json(['code'=>200, 'msg'=>'操作成功']);
 	}
 
+	//更新
 	public function update()
 	{
 		if (!request()->isPost()) return json(['code'=>0, 'msg'=>'请求类型错误']);
@@ -98,7 +94,7 @@ class Count extends Base
 		$types = $form['type'] ?: [];
 		$open  = $form['open'] ?: 0;
 
-		$round = new Round();
+		$round = new roundModel;
 		$info = $round->get($id);
 		if ($info['open'] == 1) return json(['code'=>0, 'msg'=>'不能修改正在启用中的计划']);
 		if ($stime > $etime) return json(['code'=>0, 'msg'=>'开始时间不能大于截止时间']);
@@ -123,27 +119,42 @@ class Count extends Base
 		return json(['code'=>200, 'msg'=>'修改成功']);
 	}
 
+	//关闭轮次
 	public function close()
 	{
 		$id = input('post.id', 0);
 		if (!$id) return json(['code'=>0, 'msg'=>'参数异常']);
 
-		$round = new round();
+		$round = roundModel;
 		$retval = $round->where('id', $id)->update('open', 0);
 		if (!$retval) return json(['code'=>0, 'msg'=>'关闭失败']);
 
 		return json(['code'=>200, 'msg'=>'已关闭']);	
 	}
 
+	//删除轮次
 	public function delete()
 	{
 		$id = input('post.id', 0);
 		if (!$id) return json(['code'=>0, 'msg'=>'参数异常']);
 
-		$round = new round();
+		$round = new roundModel;
 		$retval = $round->where('id', $id)->update('open', 2);
 		if (!$retval) return json(['code'=>0, 'msg'=>'删除失败']);
 
 		return json(['code'=>200, 'msg'=>'删除成功']);	
+	}
+
+	//查看详情
+	public function detail($id = 0, $page = 1)
+	{
+		$id = input('get.id');
+		if (!$id) return;
+
+		$model = new planModel;
+		$plans = $model->getList($id, 10, ['query'=>request()->param(), 'type'     => 'bootstrap', 'var_page' => 'page',]);
+
+		$this->assign('plans', $plans);
+		return view();
 	}
 }

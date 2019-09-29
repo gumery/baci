@@ -17,23 +17,17 @@
     }
   </style>
 </head>
-<body>
+<body class="layui-fluid" style="background-color: floralwhite;">
 <div>
+<?php if ($round['status'] == 1) { ?>
 <blockquote class="layui-elem-quote layui-text">
 		<p>请选择{$round['stime']}--{$round['etime']}的就餐方式</p>
 </blockquote>
-{if $round['status'] == 1}              
 <form class="layui-form">
   <div class="layui-form-item">
     <label class="layui-form-label layui-required">您的姓名</label>
     <div class="layui-input-block">
       <input type="text" name="username" lay-verify="required|username" autocomplete="off" placeholder="请输入姓名" class="layui-input">
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label layui-required">手机号</label>
-    <div class="layui-input-block">
-      <input type="text" name="phone" lay-verify="required|phone" autocomplete="off" placeholder="请输入手机号" class="layui-input">
     </div>
   </div>
   
@@ -47,22 +41,35 @@
 			</tr>
 		</thead>
 		<tbody>
-	  	{foreach name="range" item="sub"}
+		<?php foreach ($range as $sub) { ?>
   			<tr>
 				<th>
-					{$sub}
+						<?=$sub ?>
 				</th>
 				<th>
 						<input type="checkbox" name="weeks[{$sub}]" title="<?= $weeks[date('l', strtotime($sub))]?>">
 				</th>
 				<th>
-						<input type="radio" name="types[{$sub}]" title="餐桌" value=1 checked="">
-						<input type="radio" name="types[{$sub}]" title="自助" value=2>
+				<?php
+					$count = count($types);
+					foreach ($types as $type){ ?>
+				<?php if ($type == 1) { ?>
+				<input type="radio" name="types[<?=$sub?>]" title="餐桌" value=1 checked="">
+				<?php }else if ($type == 2) { ?>
+				<input type="radio" name="types[<?=$sub?>]" title="自助" value=2 <?= $count==1 ? 'checked': '' ?>>
+				<?php } }?>
 				</th>
 			</tr>
-  		{/foreach}
+		<?php } ?>
 		</tbody>
   	</table>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label layui-required">验证码</label>
+	<div class="layui-input-inline">
+      <input type="text" name="captcha" lay-verify="required|captcha" autocomplete="off" class="layui-input">
+    </div>
+	<div><img src="{:captcha_src()}" alt="captcha"  onClick="this.src=this.src+'?'+Math.random()" title="看不清楚?点击刷新验证码?"/></div> 
   </div>
   <div class="layui-form-item">
 	<div class="layui-input-block layui-col-xs1">
@@ -74,12 +81,11 @@
     </div>
   </div>
 </form>
-{else}
-  <div class="layui-form-item layui-col-xs6">
-    <label class="layui-form-label">请耐心等待</label>
-  
+<?php } else { ?>
+  <div class="layui-form-item" style="margin-top: 200px;text-align: center;">
+		  <h1>管理员尚未开启，请等待</h1>
 </div>
-{/if}
+<?php } ?>
 </div>
  
           
@@ -99,6 +105,11 @@ layui.use(['form', 'layedit', 'laydate'], function(){
       }
 	  if(value.length > 10){
         return '您的姓名过长!';
+      }
+    },
+    captcha: function(value){
+      if(value.length == 0){
+        return '请输入验证码!';
       }
     }
   });
