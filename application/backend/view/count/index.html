@@ -41,9 +41,9 @@
 						<td class="text-center"><?= $statusTitle[$round->status]?></td>
 			            <td>
 							  <a  style="margin: 0 10px;" href="/backend/count/detail?id=<?=$round->id?>">详情</button>
-							  <?php if ($round->status == $roundModel::STATUS_WAITING_ON) {?>
+							  <?php if ($round->status == \app\model\Round::STATUS_WAITING_ON) {?>
 							  <a style="margin: 0 10px;" href="javascript:;" class="btn-on" round-id="<?=$round->id?>">开启</button>
-							  <?php }else if ($round->status == $roundModel::STATUS_ON) { ?>
+							  <?php }else if ($round->status == \app\model\Round::STATUS_ON) { ?>
 							  <a style="margin: 0 10px;" href="javascript:;" class="btn-done" round-id="<?=$round->id?>">关闭</button>
 							  <?php } ?>
 							  <a style="margin: 0 10px;" href="javascript:;" class="btn-delete" round-id="<?=$round->id?>">删除</button>

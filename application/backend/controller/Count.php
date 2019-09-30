@@ -20,12 +20,11 @@ class Count extends Base
 		$round = new roundModel;
 		$rounds = $round->order('id desc')->select();
 
-		$statusTitle = $round::$status_title;
-		$typeTitle = $round::$type_title;
+		$statusTitle = roundModel::$status_title;
+		$typeTitle = roundModel::$type_title;
 		$this->assign('statusTitle', $statusTitle);
 		$this->assign('typeTitle', $typeTitle);
 		$this->assign('rounds', $rounds);
-		$this->assign('roundModel', $round);
 		return view();
 	}
 
