@@ -15,12 +15,17 @@ class Count extends Base
 	}
 
 	//统计列表页
-	public function index($id='')
+	public function index()
 	{
 		$round = new roundModel;
 		$rounds = $round->order('id desc')->select();
 
+		$statusTitle = $round::$status_title;
+		$typeTitle = $round::$type_title;
+		$this->assign('statusTitle', $statusTitle);
+		$this->assign('typeTitle', $typeTitle);
 		$this->assign('rounds', $rounds);
+		$this->assign('roundModel', $round);
 		return view();
 	}
 
@@ -146,13 +151,13 @@ class Count extends Base
 	}
 
 	//查看详情
-	public function detail($id = 0, $page = 1)
+	public function detail($id = 0)
 	{
 		$id = input('get.id');
-		if (!$id) return;
+		if (!$id) return $this->error('没有id');
 
 		$model = new planModel;
-		$plans = $model->getList($id, 10, ['query'=>request()->param(), 'type'     => 'bootstrap', 'var_page' => 'page',]);
+		$plans = $model->getList($id, 10, ['query'=>request()->param()]);
 
 		$this->assign('plans', $plans);
 		return view();

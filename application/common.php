@@ -10,3 +10,20 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+    /*
+     * Shortcut for json_encode() with JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES
+     * e.g. H("Hello, %s!", "world")
+     *
+     * @return string
+     **/
+    if (function_exists('J')) {
+        die('J() was declared by other libraries, which may cause problems!');
+    } else {
+        function J($v, $opt = 0)
+        {
+            $opt |= JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+
+            return @json_encode($v, $opt);
+        }
+    }

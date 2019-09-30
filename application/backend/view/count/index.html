@@ -15,7 +15,7 @@
           <section class="dashboard-counts no-padding-bottom">
             <div class="container-fluid">
               <div class="row bg-white has-shadow">
-			    <table class="table table-hover table-condensed" data-toggle="table" data-pagination="true">
+			    <table id="table" class="table table-hover table-condensed" data-toggle="table" data-pagination="true">
 			      <thead>
 			        <tr>
 			          <th data-field="id">ID</th>
@@ -25,32 +25,61 @@
 			          <th data-field="operate">操作</th>
 			        </tr>
 			      </thead>
-			      <tbody>
-					{foreach name='rounds' item='round'}
+					 <?php
+				 		foreach ($rounds as $round ) {
+				 		$str = [];
+				 		$types = json_decode($round->types, true);
+					 	foreach ($types as $type) {
+							$str[] = $typeTitle[$type];
+						}
+						$str = implode('/', $str);
+					 ?>
 			        <tr>
-					  <td>{$round.id}</td>
-					  <td>{$round.stime .'~'. $round.etime}</td>
-					  <td>{$round.types}</td>
-					  <td class="text-center">
-							<?php 
-								if ($round['status'] == 1) {
-									$status = '启用中';
-								} else if ($round['status'] == 2) {
-									$status = '已结束';
-								}
-							?>
-			          <td>
-							 {if ($round.status == 1) }
-							  <button type="button" class="btn btn-close btn-primary">关闭</button>
-							 {/if}
-							  <button type="button" class="btn btn-delete btn-danger">删除</button>
-					  </td>
+					    <td><?=$round->id?></td>
+						<td><?= $round->stime .'~'. $round->etime?></td>
+						<td><?=$str?></td>
+						<td class="text-center"><?= $statusTitle[$round->status]?></td>
+			            <td>
+							  <a  style="margin: 0 10px;" href="/backend/count/detail?id=<?=$round->id?>">详情</button>
+							  <?php if ($round->status == $roundModel::STATUS_WAITING_ON) {?>
+							  <a style="margin: 0 10px;" href="javascript:;" class="btn-on" round-id="<?=$round->id?>">开启</button>
+							  <?php }else if ($round->status == $roundModel::STATUS_ON) { ?>
+							  <a style="margin: 0 10px;" href="javascript:;" class="btn-done" round-id="<?=$round->id?>">关闭</button>
+							  <?php } ?>
+							  <a style="margin: 0 10px;" href="javascript:;" class="btn-delete" round-id="<?=$round->id?>">删除</button>
+					    </td>
 			        </tr>
-					{/foreach}
+					<?php } ?>
 			      </tbody>
 			    </table>
               </div>
             </div>
           </section>
         </div>
-		{/block}
+{/block}
+
+{block name="script"}
+<script src="/assets/layui/dist/layui.js" charset="utf-8"></script>
+<script>
+layui.use(['form'], function(){
+var layer = layui.layer
+	, jq = layui.jquery;
+jq('.btn-delete').on('click', function(){
+	var $that = $(this);
+    layer.confirm('真的删除行么', function(index){
+		var id = $that.attr('round-id');
+
+        layer.close(index);
+      });
+	
+	
+});
+
+jq('.btn-on').on('click', function(){
+});
+
+jq('.btn-done').on('click', function(){
+});
+});
+</script>
+{/block}

@@ -226,14 +226,14 @@ return [
     'session'                => [
         'id'             => '',
         // SESSION_ID的提交变量,解决flash上传跨域
-        'var_session_id' => '',
+        'var_session_id' => 'ses',
         // SESSION 前缀
         'prefix'         => 'think',
         // 驱动方式 支持redis memcache memcached
         'type'           => '',
         // 是否自动开启 SESSION
         'auto_start'     => true,
-		'expire'         => 600,
+		'expire'         => 1800,
     ],
 
     // +----------------------------------------------------------------------

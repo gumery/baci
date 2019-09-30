@@ -12,17 +12,19 @@ class Round extends Model
 	const TYPE_TABLE = 1;
 	const TYPE_SELF_HELP = 2;
 
+	const STATUS_WAITING_ON = 0;
 	const STATUS_ON = 1;
 	const STATUS_DONE = 2;
 
 	public static $type_title = [
-		self::TYPE_TABLE = "餐桌";
-		self::TYPE_SELF_HELP = "自助";
+		self::TYPE_TABLE => "餐桌",
+		self::TYPE_SELF_HELP => "自助",
 	];
 
 	public static $status_title = [
-		self::STATUS_ON = "开启";
-		self::STATUS_ON = "关闭";
+		self::STATUS_WAITING_ON => "待开启",
+		self::STATUS_ON => "进行中",
+		self::STATUS_DONE => "已结束"
 	];	
 
 	public function getRound($id = 0)

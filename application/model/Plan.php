@@ -3,6 +3,7 @@
 namespace app\model;
 
 use think\Model;
+use think\Cache;
 
 class Plan extends Model
 {
@@ -17,8 +18,13 @@ class Plan extends Model
 	{
 		if (!$roundId) return;
 
+		$query = J([$roundId, $pagesize, $condition]);
+
+		$data = Cache::store('redis')->get('getPlanList'. $query);
+		if (!empty($data)) return $data;
 		$data = $this->where('round_id', $roundId)->paginate($pagesize, false, $condition);
 
+		Cache::store('redis')->set('getPlanList'. $query, $data);
 		return $data;
 	}
 }
