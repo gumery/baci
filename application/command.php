@@ -11,4 +11,5 @@
 
 return [
 		'app\backend\cli\User',
+		'app\backend\cli\Test',
 ];
