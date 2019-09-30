@@ -31,7 +31,7 @@ class User extends Model
 	public function getUserInfo($sign)
 	{
 		if (!$sign) return false;
-		$data = $this->where('account', $sign)->whereOr('token', $sign)->cache(true)->find(1)->toArray();
+		$data = $this->where('account', $sign)->whereOr('token', $sign)->cache(true)->find()->toArray();
 		return $data;
 	}
 
