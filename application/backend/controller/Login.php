@@ -8,6 +8,7 @@ use think\Session as Session;
 
 class Login extends Controller
 {
+	//登录页面
 	public function index()
 	{
 		$token = Session::get('access_token');
@@ -15,6 +16,7 @@ class Login extends Controller
 		return view();
 	}
 
+	//登录逻辑
 	public function login()
 	{
 		if (!request()->isPost()) return $this->error('请求方式错误！');
